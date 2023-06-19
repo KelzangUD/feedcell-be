@@ -1,0 +1,51 @@
+{
+  "version": "1.0.0",
+  "name": "project",
+  "dependencies": {
+    "bcrypt": {
+      "version": "5.0.1"
+    },
+    "body-parser": {
+      "version": "1.20.0"
+    },
+    "cors": {
+      "version": "2.8.5"
+    },
+    "dayjs": {
+      "version": "1.11.3"
+    },
+    "dotenv": {
+      "version": "16.0.1"
+    },
+    "express": {
+      "version": "4.18.1"
+    },
+    "fs": {
+      "version": "0.0.1-security"
+    },
+    "gridfs-stream": {
+      "version": "1.1.1"
+    },
+    "method-override": {
+      "version": "3.0.0"
+    },
+    "mongoose": {
+      "version": "6.4.0"
+    },
+    "multer-gridfs-storage": {
+      "version": "5.0.2"
+    },
+    "multer": {
+      "version": "1.4.5-lts.1"
+    },
+    "nodemailer": {
+      "version": "6.7.5"
+    },
+    "nodemon": {
+      "version": "2.0.19"
+    },
+    "path": {
+      "version": "0.12.7"
+    }
+  }
+}
