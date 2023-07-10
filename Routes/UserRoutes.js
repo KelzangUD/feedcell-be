@@ -416,8 +416,8 @@ router.get("/sso/:token", (_req, res) => {
   User.findOne({ empID: empID })
     .then((users) => {
       if(users.number){
-        // let payLoadClient = employeeID + "@" + users.number + "@" + formatingDate(new Date());
-        const payLoadClient = employeeID + "@" + users.number + "@" + "2023_06_12_17";
+        const payLoadClient = employeeID + "@" + users.number + "@" + formatingDate(new Date()); //use in server for sso-login
+        // const payLoadClient = employeeID + "@" + users.number + "@" + "2023_06_12_17";
         const publicKey = fs.readFileSync(__dirname+"/FEEDCELL_SSO.pem", { encoding: "utf8" });
         const bcryptVerification = verifyPassword(payLoadClient, tokenSignedDataJava);
         const tokenVerification = verification(publicKey, tokenSignedData, tokenSignature);
