@@ -71,4 +71,23 @@ router.post("/new-password", async (req, res) => {
   }
 });
 
+//Create new password
+router.post("/sso-new-password", async (req, res) => {
+  console.log(req.query)
+  const emp_id = `E00${req.query.empID}`; 
+  try {
+    User.findOne({ empID: emp_id }, (err, user) => {
+      if (user) {
+        user.password = req.query.password;
+        user.save();
+        return res.json({ message: "Password updated successfully" });
+      } else {
+        res.json({ message: err.message });
+      }
+    });
+  } catch (err) {
+    res.json({ message: err.message });
+  }
+});
+
 module.exports = router;

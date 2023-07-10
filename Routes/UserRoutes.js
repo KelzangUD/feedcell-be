@@ -275,6 +275,31 @@ router.get("/get-all-users", (req, res) => {
   );
 });
 
+// update status in sso
+
+const updateUserStatusInSso = async(data) => {
+  let userData = qs.stringify(data);
+  
+  let config = {
+    method: 'post',
+    maxBodyLength: Infinity,
+    url: `${process.env.SSO_API}/employee-mapping`,
+    headers: { 
+      'Content-Type': 'application/x-www-form-urlencoded', 
+      'Authorization': 'Basic dmFzYXBwX3JlY29uOnZAc18mX29ubV8xMjMl'
+    },
+    data : userData
+  };
+  
+  axios.request(config)
+  .then((response) => {
+    return response;
+  })
+  .catch((error) => {
+    return error;
+  });
+}
+
 //update status
 router.post("/update-status/:id", async (req, res) => {
   try {
@@ -285,8 +310,42 @@ router.post("/update-status/:id", async (req, res) => {
       user.status = req.body.status;
       user
         .save()
-        .then((emp) => {
-          res.json({ message: "Status Updated Successfully" });
+        .then((response) => {
+          const data = {
+            empId: response.empID.split("0")[2],
+            appCode : process.env.SSO_APPCODE,
+            access : response.status === 'active' ? 1 : 0
+          }
+          const ssoResponse = updateUserStatusInSso(data)
+          if (ssoResponse.status === 200) {
+            return res.status(200).json({ message: "Status Updated Successfully" });
+          } else {
+            return res.status(200).json({ message: ssoResponse });
+          }
+        })
+        .catch((err) => {
+          res.status(400).send({ message: "Unable To Update Status" });
+          console.log(err);
+        });
+    }
+  } catch (err) {
+    return res.json({ message: "Something went wrong. Try again" });
+  }
+});
+
+//update status
+router.post("/sso-update-status", async (req, res) => {
+  try {
+    const emp_id = `E00${req.query.empID}`
+    const user = await User.findOne({ empID: emp_id });
+    if (!user) {
+      return res.status(200).send({ message: "User not found"});
+    } else {
+      user.status = req.query.userStatus === '1' ? 'active' : 'suspend';
+      user
+        .save()
+        .then((response) => {
+          res.status(200).json({ message: "Status Updated Successfully" });
         })
         .catch((err) => {
           res.status(400).send({ message: "Unable To Update Status" });
