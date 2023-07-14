@@ -336,7 +336,7 @@ router.post("/update-status/:id", async (req, res) => {
 //update status
 router.post("/sso-update-status", async (req, res) => {
   try {
-    const emp_id = `E00${req.query.empID}`
+    const emp_id = `E00${req.body.empID}`
     const user = await User.findOne({ empID: emp_id });
     if (!user) {
       return res.status(200).send({ message: "User not found"});
