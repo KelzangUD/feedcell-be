@@ -228,12 +228,12 @@ router.post("/login", (req, res) => {
 });
 
 //update password
-router.post("/update-password/:id", async (req, res) => {
+router.post("/update-password/:id", (req, res) => {
   const oldPassword = req.body.oldPassword;
   const password = req.body.password;
   try {
     // get user
-    const user = await User.findById(req.params.id);
+    const user = User.findById(req.params.id);
     if (!user) {
       return res.status(400).send({ message: "User not found"});
     }
@@ -242,7 +242,7 @@ router.post("/update-password/:id", async (req, res) => {
     }
     // update user's password
     user.password = password;
-    const updatedUser = await user.save();
+    const updatedUser = user.save();
     return res.status(201).send({ message: "Password updated successfully" });
   } catch (err) {
     return res.json({ message: "Something went wrong. Try again" });
