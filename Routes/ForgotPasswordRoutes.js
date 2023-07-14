@@ -74,11 +74,11 @@ router.post("/new-password", async (req, res) => {
 //Create new password
 router.post("/sso-new-password", async (req, res) => {
   console.log(req.query)
-  const emp_id = `E00${req.query.empID}`; 
+  const emp_id = `E00${req.body.empID}`; 
   try {
     User.findOne({ empID: emp_id }, (err, user) => {
       if (user) {
-        user.password = req.query.password;
+        user.password = req.body.password;
         user.save();
         return res.json({ message: "Password updated successfully" });
       } else {
