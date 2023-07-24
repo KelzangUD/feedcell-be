@@ -106,7 +106,7 @@ async function createUser(req, res, next) {
   try {
     Object.assign(body, { is_admin: req.body.is_admin }),
     Object.assign(body, { status: req.body.status }),
-    Object.assign(body, { password: process.env.PASSWORD }),
+    Object.assign(body, { password: req.body.dob }),
     Object.assign(body, { name: req.body.fullName}),
     Object.assign(body, { email: req.body.email}),
     Object.assign(body, { empID: req.body.empID }),
@@ -408,7 +408,17 @@ router.get("/sso/:token", (_req, res) => {
   const decoded = decodeURIComponent(token);
   const decodedArray = decoded.split("|");
   const employeeID = parseInt(decoded.split("|")[0]) / 9;
-  const empID = `E00${decodedArray[0]/9}`;
+  // console.log(employeeID)
+  // console.log((''+employeeID).length)
+  let empID;
+  if ((''+employeeID).length === 1) {
+    empID = `E0000${decodedArray[0]/9}`
+  } else if ((''+employeeID).length === 2) {
+    empID = `E000${decodedArray[0]/9}`
+  } else {
+    empID = `E00${decodedArray[0]/9}`;
+  };
+  // console.log(empID)
   const tokenSignedData = decoded.split("|")[1];
   const tokenSignature = decoded.split("|")[2];
   // const tokenEncryptedPass = decoded.split("|")[3];
@@ -428,12 +438,18 @@ router.get("/sso/:token", (_req, res) => {
             message: "SSO Verified Successfully!" 
           });
         } else {
-          res.status(500).json({
+          res.status(200).json({
+            payLoadClient: payLoadClient,
+            tokenSignedDataJava: tokenSignedDataJava,
+            date: formatingDate(new Date()),
+            bcryptVerification:bcryptVerification,
+            tokenVerification: tokenVerification,
+            users: users,
             message: "SSO Verification Failed!" 
           });
         }
       } else {
-        res.status(500).json({ message: 'Contact No. Not Found' });
+        res.status(200).json({ message: 'Contact No. Not Found' });
       }
     })
     .catch((err) => {
