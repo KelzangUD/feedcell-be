@@ -16,6 +16,9 @@ const app = express();
 dbConnection();
 
 app.use(cors());
+// app.use(cors({
+//     origin: 'https://kep.tashicell.com'
+// }));
 
 //Routes
 app.use(bodyParser.json());

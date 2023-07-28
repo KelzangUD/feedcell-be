@@ -381,7 +381,8 @@ const formatingDate = (date) => {
   hour = hour < 10 ? "0" + hour : hour;
 
   // Return the formatted date
-  return `${year}_${month}_${day}_${hour}`;
+  // return `${year}_${month}_${day}_${hour}`;
+  return `${year}_${month}_${day}`;
 };
 const verifyPassword = (password, hashedPassword) => {
   return bcrypt.compareSync(password, hashedPassword);
